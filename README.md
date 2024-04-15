@@ -1,1 +1,1 @@
-python based shortest family relationship calculator
+prolog based shortest family relationship calculator
