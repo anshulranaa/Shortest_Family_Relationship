@@ -59,6 +59,7 @@ mother(Mother, Child) :-
 grandfather(GF, GC) :-
     parent(P, GC),
     father(GF, P).
+
 grandmother(GM, GC) :- 
     parent(P, GC),
     mother(GM, P).
@@ -123,51 +124,71 @@ cousin(Cousin, Person) :-
     ).
 
 
-% Define relationships
-relationship(father, Father, Child) :- father(Father, Child).
-relationship(mother, Mother, Child) :- mother(Mother, Child).
-relationship(grandfather, Grandfather, Grandchild) :- grandfather(Grandfather, Grandchild).
-relationship(grandmother, Grandmother, Grandchild) :- grandmother(Grandmother, Grandchild).
-relationship(uncle, Uncle, Child) :- uncle(Uncle, Child).
-relationship(aunt, Aunt, Child) :- aunt(Aunt, Child).
-relationship(nephew, Nephew, Person) :- nephew(Nephew, Person).
-relationship(niece, Niece, Person) :- niece(Niece, Person).
-relationship(cousin, Cousin, Person) :- cousin(Cousin, Person).
+relationship(F, father, C) :- father(F, C).
+relationship(M, mother, C) :- mother(M, C).
+relationship(GF, grandfather, GC) :- grandfather(GF, GC).
+relationship(GM, grandmother, GC) :- grandmother(GM, GC).
+relationship(B, brother, S) :- brother(B, S).
+relationship(Sis, sister, S) :- sister(Sis, S).
+relationship(U, uncle, C) :- uncle(U, C).
+relationship(A, aunt, C) :- aunt(A, C).
+relationship(N, nephew, P) :- nephew(N, P).
+relationship(Nc, niece, P) :- niece(Nc, P).
+relationship(C, cousin, P) :- cousin(C, P).
+relationship(h, spouse, w) :- spouse(h, w).
 
-format_path([], '').
 
-% This clause handles a single relationship in the path.
-format_path([rel(Rel, A, B)], String) :-
-    format(atom(String), '~w(~w, ~w)', [Rel, A, B]).
-
-% This clause handles multiple relationships in the path.
-format_path([rel(Rel, A, B) | Rest], String) :-
-    format_path(Rest, RestString),
-    format(atom(String), '~w(~w, ~w) > ~s', [Rel, A, B, RestString]).
-
-    
-
-% Utility to find and show paths
-find_path(Start, End, Path) :-
-    find_path(Start, End, [], RevPath),
+% Helper predicate to find the shortest path in terms of relationships
+shortest_path(Person1, Person2, Path) :-
+    % Use breadth-first search to find the shortest path
+    breadth_first([[Person1]], Person2, RevPath),
+    % Reverse the path to get the correct order from Person1 to Person2
     reverse(RevPath, Path).
 
-find_path(Person, Other, Acc, [rel(Relation, Person, Other) | Acc]) :-
-    relationship(Relation, Person, Other).
+% Breadth-first search implementation
+breadth_first([[Person2 | Path] | _], Person2, [Person2 | Path]).
+breadth_first([[Person1 | Path] | Paths], Person2, Solution) :-
+    extend_path(Person1, Path, NewPaths),
+    append(Paths, NewPaths, Paths1),
+    breadth_first(Paths1, Person2, Solution).
 
-% Recursively find a relationship path, ensuring to wrap each step in the 'rel' functor
-find_path(Person, Other, Acc, Path) :-
-    relationship(Relation, Person, Intermediate),
-    Intermediate \= Other,
-    \+ memberchk(rel(_, Intermediate, _), Acc),  % Enhanced check: Avoid any past intermediate
-    find_path(Intermediate, Other, [rel(Relation, Person, Intermediate) | Acc], Path).
+% Extend a path to all directly related persons not yet in the path
+extend_path(Person, Path, NewPaths) :-
+    findall([NewPerson, Person | Path],
+            (relationship(Person, _, NewPerson), \+ member(NewPerson, Path)),
+            NewPaths).
 
-show_relationship(P1, P2) :-
-    find_path(P1, P2, Path),
-    format_path(Path, String),
-    format('~w is related to ~w via: ~s\n', [P1, P2, String]).
+% Show the shortest relationship path between two persons
+show_shortest_relationship(Person1, Person2) :-
+    (   shortest_path(Person1, Person2, Path) ->
+        write('The shortest relationship path from '), 
+        write(Person1), 
+        write(' to '), 
+        write(Person2), 
+        write(' is: '), 
+        print_path(Path)
+    ;   shortest_path(Person2, Person1, Path) ->
+        write('The shortest relationship path from '), 
+        write(Person2), 
+        write(' to '), 
+        write(Person1), 
+        write(' is: '), 
+        print_path(Path)
+    ;   write('No relationship path found between '), 
+        write(Person1), 
+        write(' and '), 
+        write(Person2), 
+        write('.\n')
+    ).
 
-show_relationship(P1, P2) :-
-    \+ find_path(P1, P2, _),
-    writeln('No known relationship.').
+% Helper predicate to print the path of relationships
+print_path([]) :-
+    nl.
+print_path([Person]) :-
+    write(Person), nl.
+print_path([Person1, Person2 | Rest]) :-
+    relationship(Person1, Relation, Person2),
+    format('~w (~w) -> ', [Person1, Relation]),
+    print_path([Person2 | Rest]).
+
 

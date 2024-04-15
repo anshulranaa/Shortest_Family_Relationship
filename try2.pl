@@ -59,6 +59,7 @@ mother(Mother, Child) :-
 grandfather(GF, GC) :-
     parent(P, GC),
     father(GF, P).
+
 grandmother(GM, GC) :- 
     parent(P, GC),
     mother(GM, P).
@@ -123,51 +124,22 @@ cousin(Cousin, Person) :-
     ).
 
 
-% Define relationships
-relationship(father, Father, Child) :- father(Father, Child).
-relationship(mother, Mother, Child) :- mother(Mother, Child).
-relationship(grandfather, Grandfather, Grandchild) :- grandfather(Grandfather, Grandchild).
-relationship(grandmother, Grandmother, Grandchild) :- grandmother(Grandmother, Grandchild).
-relationship(uncle, Uncle, Child) :- uncle(Uncle, Child).
-relationship(aunt, Aunt, Child) :- aunt(Aunt, Child).
-relationship(nephew, Nephew, Person) :- nephew(Nephew, Person).
-relationship(niece, Niece, Person) :- niece(Niece, Person).
-relationship(cousin, Cousin, Person) :- cousin(Cousin, Person).
+% Redefine relationships with a two-argument structure for direct queries
 
-format_path([], '').
+relationship(F, C) :- father(F, C), format('~w is a father of ~w.', [F, C]).
+relationship(M, C) :- mother(M, C), format('~w is a mother of ~w.', [M, C]).
+relationship(GP, GC) :- grandfather(GP, GC), format('~w is a grandfather of ~w.', [GP, GC]).
+relationship(GC, GP) :- grandmother(GC, GP), format('~w is a grandmother of ~w.', [GC, GP]).
+relationship(U, C) :- uncle(U, C), format('~w is an uncle of ~w.', [U, C]).
+relationship(A, C) :- aunt(A, C), format('~w is an aunt of ~w.', [A, C]).
+relationship(N, X) :- nephew(N, X), format('~w is a nephew of ~w.', [N, X]).
+relationship(N, X) :- niece(N, X), format('~w is a niece of ~w.', [N, X]).
+relationship(P, C) :- cousin(P, C), format('~w is a cousin of ~w.', [P, C]).
 
-% This clause handles a single relationship in the path.
-format_path([rel(Rel, A, B)], String) :-
-    format(atom(String), '~w(~w, ~w)', [Rel, A, B]).
 
-% This clause handles multiple relationships in the path.
-format_path([rel(Rel, A, B) | Rest], String) :-
-    format_path(Rest, RestString),
-    format(atom(String), '~w(~w, ~w) > ~s', [Rel, A, B, RestString]).
 
-    
-
-% Utility to find and show paths
-find_path(Start, End, Path) :-
-    find_path(Start, End, [], RevPath),
-    reverse(RevPath, Path).
-
-find_path(Person, Other, Acc, [rel(Relation, Person, Other) | Acc]) :-
-    relationship(Relation, Person, Other).
-
-% Recursively find a relationship path, ensuring to wrap each step in the 'rel' functor
-find_path(Person, Other, Acc, Path) :-
-    relationship(Relation, Person, Intermediate),
-    Intermediate \= Other,
-    \+ memberchk(rel(_, Intermediate, _), Acc),  % Enhanced check: Avoid any past intermediate
-    find_path(Intermediate, Other, [rel(Relation, Person, Intermediate) | Acc], Path).
-
+% Helper predicate to display relationships
 show_relationship(P1, P2) :-
-    find_path(P1, P2, Path),
-    format_path(Path, String),
-    format('~w is related to ~w via: ~s\n', [P1, P2, String]).
-
-show_relationship(P1, P2) :-
-    \+ find_path(P1, P2, _),
+    relationship(P1, P2), !; % Find a relationship and stop.
     writeln('No known relationship.').
 
