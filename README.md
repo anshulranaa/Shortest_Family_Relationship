@@ -1,3 +1,4 @@
+# Shortest Family Chain of Relationship in Prolog
 **By : Anshul Rana and Priyansh Desai**
 
 The Prolog program is designed to answer queries about relationships between individuals. This report provides an overview of the program's functionality, implementation details, and explanation of how it generates the shortest possible chain of relations.
