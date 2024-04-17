@@ -46,12 +46,12 @@ The program is structured into several sections:
 - **Shortest Path Generation**: Implements a breadth-first search algorithm to find the shortest path between two individuals in terms of their relationships.
     
     ```prolog
-    % Breadth-first search implementation
-    breadth_first([[Person2 | Path] | _], Person2, [Person2 | Path]).
-    breadth_first([[Person1 | Path] | Paths], Person2, Solution) :-
-        extend_path(Person1, Path, NewPaths),
+    % Breadth-first search helper predicate
+    breadth_first([[Goal | Path] | _], Goal, _, [Goal | Path]).
+    breadth_first([[Person | Path] | Paths], Goal, Visited, Solution) :-
+        extend_path_with_visited(Person, Path, Visited, NewPaths, NewVisited),
         append(Paths, NewPaths, Paths1),
-        breadth_first(Paths1, Person2, Solution).
+        breadth_first(Paths1, Goal, NewVisited, Solution).
     ```
     
 - **Query Handling**: Parses user queries, extracts individuals involved, and invokes the shortest path generation to answer the query.
