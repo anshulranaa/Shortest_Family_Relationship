@@ -1,0 +1,51 @@
+male(ethan).
+female(sophia).
+female(isabella).
+male(jacob).
+female(emma).
+male(noah).
+female(olivia).
+female(ava).
+male(liam).
+female(mia).
+female(amelia).
+male(james).
+female(charlotte).
+male(logan).
+female(abigail).
+
+spouse(ethan, sophia).
+spouse(sophia, ethan).
+spouse(isabella, jacob).
+spouse(jacob, isabella).
+spouse(emma, noah).
+spouse(noah, emma).
+spouse(olivia, liam).
+spouse(liam, olivia).
+spouse(mia, james).
+spouse(james, mia).
+spouse(charlotte, logan).
+spouse(logan, charlotte).
+
+parent(ethan, jacob).
+parent(sophia, jacob).
+parent(ethan, emma).
+parent(sophia, emma).
+parent(ethan, olivia).
+parent(sophia, olivia).
+parent(isabella, ava).
+parent(jacob, ava).
+parent(isabella, liam).
+parent(jacob, liam).
+parent(emma, mia).
+parent(noah, mia).
+parent(olivia, amelia).
+parent(liam, amelia).
+parent(olivia, james).
+parent(liam, james).
+parent(mia, charlotte).
+parent(james, charlotte).
+parent(mia, logan).
+parent(james, logan).
+parent(mia, abigail).
+parent(james, abigail).

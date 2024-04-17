@@ -1,0 +1,108 @@
+male(ethan).
+female(sophia).
+female(isabella).
+male(jacob).
+female(emma).
+male(noah).
+female(olivia).
+female(ava).
+male(liam).
+female(mia).
+female(amelia).
+male(james).
+female(charlotte).
+male(logan).
+female(abigail).
+male(henry).
+female(eleanor).
+male(william).
+female(zoe).
+male(alexander).
+female(lily).
+female(violet).
+male(lucas).
+female(ella).
+male(max).
+female(scarlett).
+male(jack).
+female(hazel).
+male(charlie).
+female(nora).
+
+spouse(ethan, sophia).
+spouse(sophia, ethan).
+spouse(isabella, jacob).
+spouse(jacob, isabella).
+spouse(emma, noah).
+spouse(noah, emma).
+spouse(olivia, liam).
+spouse(liam, olivia).
+spouse(mia, james).
+spouse(james, mia).
+spouse(charlotte, logan).
+spouse(logan, charlotte).
+spouse(eleanor, henry).
+spouse(henry, eleanor).
+spouse(william, zoe).
+spouse(zoe, william).
+spouse(alexander, lily).
+spouse(lily, alexander).
+spouse(lucas, violet).
+spouse(violet, lucas).
+spouse(max, scarlett).
+spouse(scarlett, max).
+spouse(jack, hazel).
+spouse(hazel, jack).
+spouse(charlie, nora).
+spouse(nora, charlie).
+
+parent(ethan, jacob).
+parent(sophia, jacob).
+parent(ethan, emma).
+parent(sophia, emma).
+parent(ethan, olivia).
+parent(sophia, olivia).
+parent(isabella, ava).
+parent(jacob, ava).
+parent(isabella, liam).
+parent(jacob, liam).
+parent(emma, mia).
+parent(noah, mia).
+parent(olivia, amelia).
+parent(liam, amelia).
+parent(olivia, james).
+parent(liam, james).
+parent(mia, charlotte).
+parent(james, charlotte).
+parent(mia, logan).
+parent(james, logan).
+parent(mia, abigail).
+parent(james, abigail).
+parent(charlotte, henry).
+parent(logan, henry).
+parent(charlotte, eleanor).
+parent(logan, eleanor).
+parent(abigail, william).
+parent(henry, william).
+parent(abigail, zoe).
+parent(henry, zoe).
+parent(eleanor, alexander).
+parent(william, alexander).
+parent(eleanor, lily).
+parent(william, lily).
+parent(zoe, lucas).
+parent(alexander, lucas).
+parent(zoe, violet).
+parent(alexander, violet).
+parent(lily, max).
+parent(lucas, max).
+parent(lily, scarlett).
+parent(lucas, scarlett).
+parent(violet, jack).
+parent(max, jack).
+parent(violet, hazel).
+parent(max, hazel).
+parent(scarlett, charlie).
+parent(jack, charlie).
+parent(scarlett, nora).
+parent(jack, nora).

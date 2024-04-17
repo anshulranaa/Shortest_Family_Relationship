@@ -192,3 +192,4 @@ print_path([Person1, Person2 | Rest]) :-
     print_path([Person2 | Rest]).
 
 
+
