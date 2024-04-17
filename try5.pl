@@ -211,13 +211,6 @@ print_list([Head|Tail]) :-
 main :-
     load_relationships('predicate_relations.txt'),
     writeln('Relationships loaded successfully. Ready for queries.'),
-    main_loop.
-
-main_loop :-
-    writeln('Please enter your query (or type "exit" to exit):'),
+    writeln('Please enter your query:'),
     read_line_to_string(user_input, Query),
-    (   Query == "exit"
-    ->  writeln('Exiting program.'), halt
-    ;   handle_query(Query),
-        main_loop  % Recursive call to continue the loop
-    ).
+    handle_query(Query)

@@ -107,6 +107,7 @@ relationship(C, cousin, P) :- cousin(C, P).
 relationship(h, spouse, w) :- spouse(h, w).
 
 
+
 % Helper predicate to find the shortest path in terms of relationships
 shortest_path(Person1, Person2, Path) :-
     % Use breadth-first search to find the shortest path
@@ -129,24 +130,29 @@ extend_path(Person, Path, NewPaths) :-
 
 % Show the shortest relationship path between two persons
 show_shortest_relationship(Person1, Person2) :-
-    (   shortest_path(Person1, Person2, Path) ->
+
+    % Convert strings to atoms
+    atom_string(Atom1, Person1),
+    atom_string(Atom2, Person2),
+
+    (   shortest_path(Atom1, Atom2, Path) ->
         write('The shortest relationship path from '), 
-        write(Person1), 
+        write(Atom1), 
         write(' to '), 
-        write(Person2), 
+        write(Atom2), 
         write(' is: '), 
         print_path(Path)
-    ;   shortest_path(Person2, Person1, Path) ->
+    ;   shortest_path(Atom2, Atom1, Path) ->
         write('The shortest relationship path from '), 
-        write(Person2), 
+        write(Atom2), 
         write(' to '), 
-        write(Person1), 
+        write(Atom1), 
         write(' is: '), 
         print_path(Path)
     ;   write('No relationship path found between '), 
-        write(Person1), 
+        write(Atom1), 
         write(' and '), 
-        write(Person2), 
+        write(Atom2), 
         write('.\n')
     ).
 
@@ -155,7 +161,7 @@ print_path(Path) :-
     path_to_sentence(Path, Sentence), % Convert the path to a sentence
     writeln(Sentence). % Write the sentence to the output
 
-% Convert the path of relationships into a sentenceg
+% Convert the path of relationships into a sentence
 path_to_sentence([], '').
 path_to_sentence([Person], Person).
 path_to_sentence([Person1, Person2], Sentence) :-
@@ -169,9 +175,49 @@ path_to_sentence([Person1, Person2, Person3 | Rest], Sentence) :-
     string_concat(RelationPart, RestSentence, Sentence).
 
 
+
+% Predicate to handle the natural language query
+handle_query(Query) :-
+    % Convert the query to lowercase for easier matching
+    string_lower(Query, LowerQuery),
+    % Use Prologs string matching to parse the query
+    parse_query(LowerQuery, Person1, Person2),
+    % Use the parsed names to show the relationship
+    show_shortest_relationship(Person1, Person2).
+
+% Parse the query to extract names based on expected sentence structure
+parse_query(Query, Person1, Person2) :-
+    % Split the query into a list of words
+    split_string(Query, " ", "", List),
+    
+    
+    % Find the position of 'is' and extract Person1
+    nth0(Index1, List, "related"),
+    nth1(Index1, List, Person1),
+
+    % Find the position of 'to' and extract Person2
+    nth0(Index2, List, "?"),
+    nth1(Index2, List, Person2). % Person2 is right after 'to'
+
+
+print_list([]). % Base case: empty list
+print_list([Head|Tail]) :-
+    writeln(Head),
+    print_list(Tail).
+
 % Start of the program
 :- initialization(main).
 
 main :-
     load_relationships('predicate_relations.txt'),
-    writeln('Relationships loaded successfully. Ready for queries.').
+    writeln('Relationships loaded successfully. Ready for queries.'),
+    main_loop.
+
+main_loop :-
+    writeln('Please enter your query (or type "exit" to exit):'),
+    read_line_to_string(user_input, Query),
+    (   Query == "exit"
+    ->  writeln('Exiting program.'), halt
+    ;   handle_query(Query),
+        main_loop  % Recursive call to continue the loop
+    ).
