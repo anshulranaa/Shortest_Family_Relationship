@@ -190,22 +190,14 @@ parse_query(Query, Person1, Person2) :-
     % Split the query into a list of words
     split_string(Query, " ", "", List),
     
-    % Print the list to the console
-    writeln('List of words:'),
-    print_list(List),
     
     % Find the position of 'is' and extract Person1
     nth0(Index1, List, "related"),
-    format('Index of "is" (zero-based): ~w~n', [Index1]),
-    nth1(Index1, List, Person1), % Person1 is right after 'is'
+    nth1(Index1, List, Person1),
 
     % Find the position of 'to' and extract Person2
     nth0(Index2, List, "?"),
-    format('Index of "to" (zero-based): ~w~n', [Index2]),
     nth1(Index2, List, Person2). % Person2 is right after 'to'
-
-
-
 
 
 print_list([]). % Base case: empty list
@@ -219,6 +211,13 @@ print_list([Head|Tail]) :-
 main :-
     load_relationships('predicate_relations.txt'),
     writeln('Relationships loaded successfully. Ready for queries.'),
-    writeln('Please enter your query:'),
+    main_loop.
+
+main_loop :-
+    writeln('Please enter your query (or type "exit" to exit):'),
     read_line_to_string(user_input, Query),
-    handle_query(Query).
+    (   Query == "exit"
+    ->  writeln('Exiting program.'), halt
+    ;   handle_query(Query),
+        main_loop  % Recursive call to continue the loop
+    ).
