@@ -104,7 +104,6 @@ relationship(A, aunt, C) :- aunt(A, C).
 relationship(N, nephew, P) :- nephew(N, P).
 relationship(Nc, niece, P) :- niece(Nc, P).
 relationship(C, cousin, P) :- cousin(C, P).
-relationship(h, spouse, w) :- spouse(h, w).
 
 
 % Helper predicate to find the shortest path in terms of relationships

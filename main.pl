@@ -92,6 +92,20 @@ cousin(Cousin, Person) :-
         parent(Aunt, Cousin)
     ).
 
+daughter_in_law(DaughterInLaw, Person) :-
+    female(DaughterInLaw),
+    parent(Person, Child),
+    spouse(Child, DaughterInLaw),
+    male(Child).
+
+son_in_law(SonInLaw, Person) :-
+    male(SonInLaw),
+    parent(Person, Child),
+    spouse(Child, SonInLaw),
+    female(Child).
+
+
+
 
 relationship(F, father, C) :- father(F, C).
 relationship(M, mother, C) :- mother(M, C).
@@ -105,28 +119,34 @@ relationship(N, nephew, P) :- nephew(N, P).
 relationship(Nc, niece, P) :- niece(Nc, P).
 relationship(C, cousin, P) :- cousin(C, P).
 relationship(h, spouse, w) :- spouse(h, w).
+relationship(DIL, daughter_in_law, P) :- daughter_in_law(DIL, P).
+
+relationship(SIL, son_in_law, P) :- son_in_law(SIL, P).
 
 
 
 % Helper predicate to find the shortest path in terms of relationships
-shortest_path(Person1, Person2, Path) :-
-    % Use breadth-first search to find the shortest path
-    breadth_first([[Person1]], Person2, RevPath),
-    % Reverse the path to get the correct order from Person1 to Person2
+% Helper predicate to find the shortest path in terms of relationships
+shortest_path(Start, Goal, Path) :-
+    breadth_first([[Start]], Goal, [Start], RevPath),
     reverse(RevPath, Path).
 
-% Breadth-first search implementation
-breadth_first([[Person2 | Path] | _], Person2, [Person2 | Path]).
-breadth_first([[Person1 | Path] | Paths], Person2, Solution) :-
-    extend_path(Person1, Path, NewPaths),
+% Breadth-first search helper predicate
+breadth_first([[Goal | Path] | _], Goal, _, [Goal | Path]).
+breadth_first([[Person | Path] | Paths], Goal, Visited, Solution) :-
+    extend_path_with_visited(Person, Path, Visited, NewPaths, NewVisited),
     append(Paths, NewPaths, Paths1),
-    breadth_first(Paths1, Person2, Solution).
+    breadth_first(Paths1, Goal, NewVisited, Solution).
 
-% Extend a path to all directly related persons not yet in the path
-extend_path(Person, Path, NewPaths) :-
+% Extend a path to all directly related persons not yet in the path, tracking visited
+extend_path_with_visited(Person, Path, Visited, NewPaths, NewVisited) :-
     findall([NewPerson, Person | Path],
-            (relationship(Person, _, NewPerson), \+ member(NewPerson, Path)),
-            NewPaths).
+            (relationship(Person, _, NewPerson), \+ member(NewPerson, Visited)),
+            NewPaths),
+    findall(NewPerson,
+            (relationship(Person, _, NewPerson), \+ member(NewPerson, Visited)),
+            NewNodes),
+    append(Visited, NewNodes, NewVisited).
 
 % Show the shortest relationship path between two persons
 show_shortest_relationship(Person1, Person2) :-
