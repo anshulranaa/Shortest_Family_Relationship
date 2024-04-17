@@ -71,8 +71,11 @@ The program is structured into several sections:
         % Find the position of 'is' and extract Person1
         nth0(Index1, List, "related"),
         nth1(Index1, List, Person1),
+    
+        % Find the position of 'to' and extract Person2
         nth0(Index2, List, "?"),
         nth1(Index2, List, Person2). 
+
     ```
     
 - **Main Loop**: Facilitates interaction with the user by continuously prompting for queries until the user chooses to exit.
@@ -84,16 +87,9 @@ The program is structured into several sections:
     main :-
         load_relationships('predicate_relations.txt'),
         writeln('Relationships loaded successfully. Ready for queries.'),
-        main_loop.
-    
-    main_loop :-
-        writeln('Please enter your query (or type "exit" to exit):'),
+        writeln('Please enter your query:'),
         read_line_to_string(user_input, Query),
-        (   Query == "exit"
-        ->  writeln('Exiting program.'), halt
-        ;   handle_query(Query),
-            main_loop  % Recursive call to continue the loop
-        ).
+        handle_query(Query)
     
     ```
     
