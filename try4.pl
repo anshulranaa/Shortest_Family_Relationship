@@ -168,41 +168,10 @@ path_to_sentence([Person1, Person2, Person3 | Rest], Sentence) :-
     format(atom(RelationPart), '~w is ~w of ~w who is ~w of ', [Person1, Relation1, Person2, Relation2]),
     string_concat(RelationPart, RestSentence, Sentence).
 
-% Processing the user query
-process_query :-
-    write('Please enter your query (e.g., "How is X related to Y"): '),
-    read_line_to_string(user_input, Query),
-    % Parsing the query
-    split_string(Query, " ", "", Words),
-    nth0(2, Words, Person1), % Extracts the third word (assuming "How is X related to Y")
-    nth0(5, Words, Person2), % Extracts the sixth word
-    % Trim any potential whitespace
-    string_lower(Person1, Lower1),
-    string_lower(Person2, Lower2),
-    % Displaying the relationship path
-    show_shortest_relationship(Lower1, Lower2).
-
-% Convert the person names to lowercase before comparing, assuming all stored names are in lowercase
-string_lower(Str, Lower) :-
-    string_codes(Str, Codes),
-    maplist(lower_code, Codes, LowerCodes),
-    string_codes(Lower, LowerCodes).
-
-lower_code(Code, LowerCode) :-
-    (   Code >= 65, Code =< 90
-    ->  LowerCode is Code + 32
-    ;   LowerCode = Code
-    ).
-
 
 % Start of the program
 :- initialization(main).
 
 main :-
     load_relationships('predicate_relations.txt'),
-    writeln('Relationships loaded successfully. Ready for queries.'),
-    repeat,
-    process_query,
-    writeln('Enter "exit" to quit or "continue" to make another query.'),
-    read_line_to_string(user_input, Response),
-    Response == "exit", !.
+    writeln('Relationships loaded successfully. Ready for queries.').
