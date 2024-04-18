@@ -1,0 +1,69 @@
+male(ed).
+male(divith).
+male(rishi).
+male(mukesh).
+male(kanye).
+male(abhishek).
+male(ismail).
+male(sukesh).
+male(priyanshu).
+male(anshul).
+
+female(selena).
+female(taylor).
+female(riddhi).
+female(katy).
+female(savita).
+female(mehroom).
+female(sarita).
+female(sushi).
+female(lucy).
+female(parul).
+
+
+spouse(selena, ed).
+spouse(ed, selena).
+spouse(taylor, divith).
+spouse(divith, taylor).
+spouse(sarita, priyanshu).
+spouse(priyanshu, sarita).
+spouse(katy, kanye).
+spouse(kanye, katy).
+spouse(mehroom, ismail).
+spouse(ismail, mehroom).
+spouse(rishi, savita).
+spouse(savita, rishi).
+spouse(mukesh,riddhi).
+spouse(riddhi,mukesh).
+
+
+parent(Selena, Taylor).
+parent(Ed, Taylor).
+parent(Selena, Priyanshu).
+parent(Ed, Priyanshu).
+
+parent(divith, rishi).
+parent(taylor, rishi).
+parent(divith, riddhi).
+parent(taylor, riddhi).
+parent(taylor, kanye).
+parent(divith, kanye).
+
+parent(savita, sukesh).
+parent(rishi, sukesh).
+
+parent(mukesh, parul).
+parent(riddhi, parul).
+
+parent(kanye, abhishek).
+parent(katy, abhishek).
+
+parent(sarita, sushi).
+parent(priyanshu, sushi).
+parent(sarita, ismail).
+parent(priyanshu, ismail).
+
+parent(mehroom, anshul).
+parent(ismail, anshul).
+
+parent(sushi,lucy)
