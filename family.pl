@@ -123,9 +123,6 @@ relationship(DIL, daughter_in_law, P) :- daughter_in_law(DIL, P).
 
 relationship(SIL, son_in_law, P) :- son_in_law(SIL, P).
 
-
-
-% Helper predicate to find the shortest path in terms of relationships
 % Helper predicate to find the shortest path in terms of relationships
 shortest_path(Start, Goal, Path) :-
     breadth_first([[Start]], Goal, [Start], RevPath),
@@ -233,4 +230,4 @@ main :-
     writeln('Relationships loaded successfully. Ready for queries.'),
     writeln('Please enter your query:'),
     read_line_to_string(user_input, Query),
-    handle_query(Query)
+    handle_query(Query).
