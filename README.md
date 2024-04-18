@@ -22,7 +22,7 @@ The Prolog program is designed to answer queries about relationships between ind
 1. Open the terminal and type
     
     ```bash
-    swipl main.pl
+    swipl family.pl
     ```
     
 2. Then type your query in this format :
